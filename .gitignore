@@ -1,0 +1,14 @@
+# Big NASA files stay on the Colab disk, never in Git
+data-analysis/data/merra2_monthly/
+data-analysis/data/gldas_monthly/
+*.nc
+*.nc4
+*.hdf
+# Notebook / Python noise
+.ipynb_checkpoints/
+__pycache__/
+# SECRETS - never commit passwords or tokens
+.netrc
+.env
+*credentials*
+*password*
