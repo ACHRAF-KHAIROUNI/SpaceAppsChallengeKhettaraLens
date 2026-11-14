@@ -3,7 +3,7 @@
 ## What is in this folder
 `team_data/` holds three small CSV files shared by the team. **Big NASA files (MERRA-2, GLDAS) are not stored in Git**: the notebook downloads them to the Colab disk.
 
-> ⚠️ **Open question for the sender:** which latitude/longitude do these files cover? About 150 mm/year of rain does not look like Merzouga. Set `TEAM_SITE` in the notebook once confirmed.
+> **Open question for the sender:** which latitude/longitude do these files cover? About 150 mm/year of rain does not look like Merzouga. Set `TEAM_SITE` in the notebook once confirmed.
 
 ## Data dictionary
 
