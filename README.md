@@ -1,4 +1,4 @@
-#  Dune Detective — Space Apps Challenge 2026
+#  Khettara Lens — Space Apps Challenge 2026
 
 **Challenge:** *Be an Earth System Trend Detective* (NASA International Space Apps Challenge 2026)
 **Goal:** fight **sand encroachment** in Africa (pilot site: **Merzouga, Morocco**) by understanding how the local climate is changing, then proposing where, when and how to plant.
