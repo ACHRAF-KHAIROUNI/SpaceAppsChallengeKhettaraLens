@@ -1,46 +1,55 @@
-# Data
+# KhettaraLens data guide
 
-## What is in this folder
-`team_data/` holds three small CSV files shared by the team. **Big NASA files (MERRA-2, GLDAS) are not stored in Git**: the notebook downloads them to the Colab disk.
+The [`team_data/`](team_data/) directory contains the CSV datasets used by the visualization script. The datasets cover environmental conditions and plant adaptations relevant to the KhettaraLens investigation. Large NASA source files are downloaded by the Colab notebook rather than stored in this repository.
 
-> **Open question for the sender:** which latitude/longitude do these files cover? About 150 mm/year of rain does not look like Merzouga. Set `TEAM_SITE` in the notebook once confirmed.
+## Dataset inventory
 
-## Data dictionary
+### Rainfall
 
-### `team_data/power_precipitation_daily.csv` — NASA POWER, daily rain (2001-2026)
-| Column | Meaning |
+| File | Contents |
 |---|---|
-| `date` | Day |
-| `rain_mm_day` | Rain that day (mm) |
-| `rain_3day_mm` | Rain over 3 days (mm) |
-| `extreme_rain_day` | True if the day is an extreme-rain day |
-| `extreme_3day_rain` | True if the 3-day total is extreme |
+| [`power_precipitation_daily.csv`](team_data/power_precipitation_daily.csv) | Daily rainfall (`rain_mm_day`), rolling 3-day total (`rain_3day_mm`), and extreme-event flags. |
+| [`power_monthly_rain_anomalies.csv`](team_data/power_monthly_rain_anomalies.csv) | Monthly rainfall and calendar-month climatology, including anomaly in millimetres and percent, z-score, year, month, and status. |
+| [`precip_extreme_rain_screening_days.csv`](team_data/precip_extreme_rain_screening_days.csv) | Dates selected for extreme-rain screening, with daily and 3-day rainfall totals and event flags. |
 
-### `team_data/power_monthly_rain_anomalies.csv` — monthly rain vs normal
-| Column | Meaning |
+### Wind
+
+| File | Contents |
 |---|---|
-| `date`, `year`, `month` | Month |
-| `rain_mm` | Rain that month (mm) |
-| `climatology_mm`, `climatology_std_mm` | Normal rain for that calendar month and its spread |
-| `anomaly_mm`, `anomaly_pct`, `z_score` | Difference to normal (mm, %, standard deviations) |
-| `status` | near-normal, above-normal / wet, or below-normal / deficit |
+| [`merra2_wind_daily_box_mean.csv`](team_data/merra2_wind_daily_box_mean.csv) | Time series of box-mean wind components, mean and maximum speed, strong-wind hours, directional counts, and vector-mean direction. |
+| [`merra2_wind_daily_sites.csv`](team_data/merra2_wind_daily_sites.csv) | Site-level wind values and coordinates, with the same wind measures as the box-mean dataset. |
 
-### `team_data/modis_sand_bsi_monthly.csv` — MODIS Bare Soil Index (2021-2026)
-| Column | Meaning |
+### Soil moisture
+
+| File | Contents |
 |---|---|
-| `date` | Date of the monthly snapshot |
-| `bsi_mean` | Mean Bare Soil Index (higher = more bare surface) |
-| `valid_pixels` | Number of valid pixels used |
-| `granules_used` | Number of satellite images used |
+| [`gldas_soil_monthly_box_mean.csv`](team_data/gldas_soil_monthly_box_mean.csv) | Monthly box-mean soil moisture, including `SoilMoi0_10cm_inst` and the derived `vol_m3m3_approx` field. |
+| [`gldas_soil_monthly_sites.csv`](team_data/gldas_soil_monthly_sites.csv) | Monthly site-level soil moisture values with site names and coordinates. |
 
-## Known limits
-- The BSI is a **change proxy only**: one image per month, with gaps (for example no data between Dec 2021 and May 2022).
-- POWER is a coarse gridded product: very large one-day values must be checked before being quoted.
-- Correlations between rain and BSI are weak (about -0.15 in our first check): treat as a lead, not a proof.
+### Surface conditions and plant adaptations
 
-## NASA data used by the notebook
-| Product | Variables | Resolution |
-|---|---|---|
-| MERRA-2 `M2TMNXSLV` v5.12.4 | wind (U10M, V10M, variances), surface skin temperature (TS) | ~50 km, monthly |
-| GLDAS Noah `GLDAS_NOAH025_M` v2.1 | soil moisture, root-zone moisture, rainfall, soil temperature | ~25 km, monthly |
-| MODIS `MOD13Q1`, `MOD11A2` (optional, Earth Engine) | NDVI, land surface temperature | 250 m, 1 km |
+| File | Contents |
+|---|---|
+| [`modis_sand_bsi_monthly.csv`](team_data/modis_sand_bsi_monthly.csv) | Monthly Bare Soil Index (`bsi_mean`), valid-pixel count, and granules used. |
+| [`morocco_merzouga_plant_adaptations.csv`](team_data/morocco_merzouga_plant_adaptations.csv) | Species, family, adaptation category, specific adaptations, and leaf structure. |
+| [`extracted_pdf_plant_adaptations.csv`](team_data/extracted_pdf_plant_adaptations.csv) | Plant names, extracted adaptation descriptions, and the suitability classification recorded in the source material. |
+
+## Important fields
+
+- `date` and `time` identify the observation date or timestamp. The visualization script parses these fields when present.
+- `site`, `lat`, and `lon` identify the site and coordinates in the site-level wind and soil files.
+- `wspd_mean`, `wspd_max`, and `strong_hours` describe wind speed and strong-wind exposure; directional fields record strong-wind counts by compass direction.
+- `vol_m3m3_approx` is the soil-moisture field plotted by the visualization script. Consult the source product and generated provenance before interpreting its units.
+- Higher `bsi_mean` values indicate a stronger bare-surface signal in this dataset. BSI should be treated as a change proxy, not a direct measurement of sand transport or vegetation cover.
+
+## Sources and limitations
+
+The repository includes data derived from NASA POWER, MERRA-2, GLDAS, and MODIS, alongside curated plant-adaptation tables. Product details, versions, and periods should be confirmed from the notebook's generated provenance report for the analysis run in question.
+
+- Gridded climate products have regional-scale resolution and cannot select individual planting spots.
+- Team rainfall and BSI files do not include site coordinates in their listed columns. Confirm their geographic coverage before attributing them to Merzouga.
+- Satellite BSI observations can be sparse or interrupted by acquisition gaps. Compare only overlapping, quality-checked periods.
+- A correlation between rainfall, wind, soil moisture, or BSI is not evidence that one variable caused another.
+- The plant tables are reference material; verify species identifications and local suitability with qualified botanical expertise before making field recommendations.
+
+For notebook usage, see the [analysis guide](../README.md) and [notebook guide](../notebooks/README.md).

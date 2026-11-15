@@ -1,55 +1,61 @@
-#  Khettara Lens — Space Apps Challenge 2026
+# KhettaraLens
 
-**Challenge:** *Be an Earth System Trend Detective* (NASA International Space Apps Challenge 2026)
-**Goal:** fight **sand encroachment** in Africa (pilot site: **Merzouga, Morocco**) by understanding how the local climate is changing, then proposing where, when and how to plant.
+**A Science4Elegance project for the NASA Space Apps Challenge 2026**
 
-## The idea in one minute
-Sand moves when **wind** is strong and the **soil is dry and bare**. We look for trends in:
+KhettaraLens explores how wind, rainfall, soil moisture, heat, and surface conditions relate to sand encroachment in the Merzouga region of Morocco. The project brings together satellite and climate datasets, plant-adaptation research, and clear visualizations to support evidence-informed discussion of local responses.
 
-| Clue | Why it matters | Data |
-|---|---|---|
-| Wind at 10 m | It transports the sand | NASA MERRA-2 |
-| Soil moisture | Dry soil = mobile sand; moist soil = plants survive | NASA GLDAS |
-| Rainfall (incl. extreme days) | Water for planting; flash floods can be harvested | NASA GLDAS, NASA POWER |
-| Surface / soil temperature | Heat dries soil and stresses young plants | NASA MERRA-2, GLDAS |
-| Bare Soil Index (BSI) / NDVI | How the land responds; how we measure planting success | MODIS |
+**Project website:** [khettaralens.netlify.app](https://khettaralens.netlify.app/)
 
-For each variable and site we answer the four questions of the challenge: **what** changes, **where**, **by how much**, and **is it statistically significant**.
+## Project at a glance
 
-## From data to action
-| Finding | Action |
+| Focus | What we investigate |
 |---|---|
-| Wind direction and strength | Place sand barriers (palm-frond fences) across the dominant wind |
-| Rare, strong rain events | Harvest runoff: zaï pits, half-moons, water pans, sand dams |
-| Soil moisture and temperature | Choose native species suited to each site; mulch and shade |
-| BSI / NDVI | Monitor results: BSI should fall, NDVI should rise |
+| Wind | Wind speed and direction as factors in sand transport |
+| Water | Rainfall patterns, soil moisture, and dry or wet periods |
+| Land surface | Bare Soil Index (BSI) as an indicator of surface change |
+| Adaptation | Plant traits and water-harvesting approaches relevant to dry environments |
 
-## Repository map
-```
-README.md                      <- you are here
-data-analysis/                 <- DATA part (notebook, data, results)
-  README.md                    <- start here for the data work
-  notebooks/                   <- the Colab notebook
-  data/                        <- team data files + data dictionary
-  results/                     <- outputs: trends, charts, dashboard
-  docs/
-    CONTRIBUTING.md            <- how we work together in Git
-    IDEAS_AND_ROADMAP.md       <- ideas, extra data, next steps
-```
-Other parts of the project (website, slides, plant/water research) go in **their own folders** so nobody overwrites anybody.
+The analysis is exploratory. Regional climate products and a surface index cannot, on their own, identify exact planting locations or prove that one environmental factor causes sand movement.
 
-## Team (fill in)
-| Role | Person | Folder |
-|---|---|---|
-| DATA (notebook, trends) | Ouiam | `data-analysis/` |
-| Dashboard / website | _to fill_ | _to fill_ |
-| Water harvesting and plants | _to fill_ | _to fill_ |
-| Story and pitch | _to fill_ | _to fill_ |
+## Environmental overview
 
-## Honest limits
-- NASA grid cells are about 25-50 km: they describe the **regional climate**, not exact planting spots.
-- A trend is **not** a cause. "No demonstrated trend" is a valid result.
-- The BSI is a *change proxy only*. Location of the team CSV files must be confirmed.
+The chart below aligns the available rainfall, wind, soil-moisture, and bare-surface time series. Gaps indicate periods without overlapping observations.
 
-## Data and AI use
-All data comes from NASA (Earthdata, POWER) and MODIS products, listed with versions in `data-analysis/results/data_provenance.csv` after running the notebook. AI tools were used to help write code and documentation, as allowed by the hackathon.
+![Aligned rainfall, wind, soil-moisture, and Bare Soil Index time series](data-analysis/data/visualizations/comparisons/aligned_small_multiples_environment.png)
+
+## Repository guide
+
+| Location | Contents |
+|---|---|
+| [`data-analysis/`](data-analysis/) | Analysis notebook, source datasets, visualization script, charts, and run-result guidance |
+| [`data-analysis/notebooks/`](data-analysis/notebooks/) | Google Colab notebook and instructions for running it |
+| [`data-analysis/data/team_data/`](data-analysis/data/team_data/) | Team datasets used by the visualization script |
+| [`data-analysis/data/visualizations/`](data-analysis/data/visualizations/) | Generated individual and cross-dataset charts |
+| [`data-analysis/results/`](data-analysis/results/) | Guidance for saving and sharing notebook outputs |
+| [`data-analysis/docs/`](data-analysis/docs/) | Contribution guidance and project roadmap |
+
+The deployed website is linked above. This repository contains the data-analysis materials listed here.
+
+## Team
+
+**Science4Elegance**
+
+- Hatim Ourahou
+- Achraf KHAIROUNI
+- Hajar FADIL
+- Taha Latif
+- Ouiam Ouatat
+- Douaa BADRI
+
+## Data and interpretation
+
+The project uses NASA MERRA-2, GLDAS, and POWER data, MODIS-derived BSI data, and curated plant-adaptation datasets. The notebook documents product versions and data provenance when it is run. Read the [data guide](data-analysis/data/README.md) for dataset descriptions and caveats.
+
+- MERRA-2 and GLDAS grid cells represent regional conditions, not individual planting sites.
+- BSI is a bare-surface change proxy; it is not a direct measurement of sand movement or vegetation health.
+- Correlation and trend results describe patterns in the available data and do not establish cause and effect.
+- Confirm the geographic coverage of team-provided rainfall and BSI files before interpreting them as site-specific.
+
+## Getting started
+
+For notebook-based climate analysis and visualization generation, follow the instructions in the [data-analysis guide](data-analysis/README.md). The [notebook guide](data-analysis/notebooks/README.md) covers Earthdata access, settings, and outputs.

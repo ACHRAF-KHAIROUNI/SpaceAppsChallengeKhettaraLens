@@ -1,52 +1,47 @@
-# Data analysis — trends in the Earth system
+# KhettaraLens data analysis
 
-This folder contains everything the DATA part produces: a **Google Colab notebook**, the **team data files**, and the **results**.
+This Science4Elegance project folder contains KhettaraLens' climate-data analysis and visualization materials. It includes a Google Colab notebook for downloading and analysing NASA data, a Python script for plotting the checked-in team CSV files, and the resulting charts.
 
-## Quick start (3 steps)
-1. Make a free **NASA Earthdata** account (https://urs.earthdata.nasa.gov) and authorise the app **"NASA GESDISC DATA ARCHIVE"** (Applications → Authorized Apps → Approve More Applications).
-2. Open `notebooks/dune_detective_trends_EN.ipynb` in Google Colab (see `notebooks/README.md`).
-3. Run the cells **one by one, in order** (Shift+Enter). Do not use "Run all".
+## Two analysis workflows
 
-## What the notebook does
-```mermaid
-flowchart LR
-  A["NASA Earthdata: MERRA-2 and GLDAS"] --> D["Colab notebook"]
-  B["Team files: POWER rain and MODIS BSI"] --> D
-  C["Optional: Earth Engine NDVI"] -.-> D
-  D --> E["Trend tests: Sen slope and Mann-Kendall"]
-  E --> F["Dashboard, charts, CSV tables"]
-  F --> G["Plan: barriers, water harvesting, native plants"]
+### 1. Trend analysis notebook
+
+[`notebooks/dune_detective_trends_EN.ipynb`](notebooks/dune_detective_trends_EN.ipynb) downloads MERRA-2 and GLDAS data after NASA Earthdata authentication. It can optionally query MODIS data through Google Earth Engine and can load three team CSVs (daily POWER rainfall, monthly rainfall anomalies, and monthly MODIS BSI) when those files are provided in Colab's `team_data/` folder.
+
+The notebook calculates annual means for complete years, applies Sen's slope and the Mann-Kendall test, and creates a dashboard, figures, result tables, and a provenance report. See the [notebook guide](notebooks/README.md) for setup and run instructions.
+
+### 2. Dataset visualization script
+
+[`data/visualize_data.py`](data/visualize_data.py) reads CSV files from `data/team_data/` and writes PNG charts to `data/visualizations/individual/` and `data/visualizations/comparisons/`. It makes individual charts for known datasets, uses a general chart fallback for unrecognized CSVs, and skips designated reference tables.
+
+From `data-analysis/data/`, install the listed packages and run the script:
+
+```bash
+python -m pip install -r requirements.txt
+python visualize_data.py
 ```
 
-| Step | What happens | Output |
-|---|---|---|
-| 4 | Wind and surface temperature (MERRA-2) | — |
-| 5 | Soil moisture, rain, soil temperature (GLDAS) | — |
-| 6 | NDVI and satellite heat (optional, Earth Engine) | — |
-| 6b | Team data: rain (POWER) and BSI (MODIS) | `team_bsi_vs_rain.png` |
-| 7 | Trend tests per variable and site | `trend_results.csv`, `annual_series.csv` |
-| 8 / 8b | Summary chart and links between variables | `trend_summary.png`, `variable_links.png` |
-| 9 | Interactive dashboard | `trend_dashboard.html` |
-| 11 | Proof file | `README.md`, `data_provenance.csv` |
+The script uses pandas, NumPy, Matplotlib, Seaborn, and SciPy. It prints a warning when a dataset cannot be plotted; inspect the terminal output if an expected chart is missing.
 
-## How to read a result
-- **slope_per_decade**: typical change every 10 years, in the variable's unit.
-- **p_value**: below 0.05 means the trend is considered real (`significant = True`).
-- `significant = False` means we **cannot claim** a trend. It does not prove that nothing changes.
+## Folder map
 
-## Where things are
-| Path | Content |
+| Path | Purpose |
 |---|---|
-| `notebooks/` | The notebook and how to run it |
-| `data/` | Team CSV files and their data dictionary |
-| `results/` | Outputs of the notebook (upload after each run) |
-| `docs/` | Git workflow and project ideas |
+| [`notebooks/`](notebooks/) | Trend-analysis notebook and its guide |
+| [`data/team_data/`](data/team_data/) | Checked-in CSV datasets |
+| [`data/visualizations/`](data/visualizations/) | PNG charts produced by the visualization script |
+| [`data/requirements.txt`](data/requirements.txt) | Python dependencies for the visualization script |
+| [`results/`](results/) | Instructions for sharing notebook-generated outputs |
+| [`docs/`](docs/) | Contribution guidance and roadmap |
 
-## Common errors
-| Message | Meaning | Fix |
-|---|---|---|
-| `EulaNotAccepted` | GESDISC app not authorised | Authorise it in your Earthdata profile |
-| `Series too short or empty, skipped` | A site has no land data | Move the site inland or increase `BOX_HALF_WIDTH` |
-| Very long cell | Hundreds of NASA files are being read | Wait 10-25 min and keep the tab open |
-| Session disconnected | Colab lost the downloaded files | Re-run from step 1 |
-| `NDVI skipped` | Earth Engine not enabled | Normal; set `USE_GEE = True` only when ready |
+## Interpretation notes
+
+- MERRA-2 and GLDAS are gridded products. Their values describe regional conditions, not precise planting locations.
+- A statistically significant trend is evidence of a trend in the tested series; it does not identify a cause.
+- BSI is a bare-surface proxy, not a direct measurement of sand movement. Monthly observations may have gaps and are not independent.
+- Verify the geographic coverage of the team-provided rainfall and BSI datasets before using them to describe a specific site.
+- Treat correlations as exploratory associations, not proof of a physical relationship.
+
+## Data documentation
+
+See the [data guide](data/README.md) for the available CSV files, their fields, and dataset limitations. After a notebook run, use the generated provenance file to verify the products, versions, and periods used for that run.
